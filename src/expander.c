@@ -47,14 +47,23 @@ char	*str_inserted(char *str, char *startp, char *endp, char *str_insert)
 	return (result);
 }
 
+static bool is_alnum(char c)
+{
+	return((c >= 'a' && c <= 'z')
+		|| (c >= 'A' && c <= 'Z')
+		|| (c >= '0' && c <= '9')
+		|| (c == '_'));
+}
+
 static char	*get_pend(char *pstart)
 {
 	char	*pend;
 
+	pend = pstart + 1;
 	if (pstart[1] == '?')
 		pend = pstart + 2;
-	else
-		pend = n_strhaschar_set(pstart + 1, "$ =\t");
+	while (*pend != '\0' && is_alnum(*pend))
+		++pend;
 	if (!pend)
 		pend = pstart + n_strlen(pstart);
 	return (pend);
