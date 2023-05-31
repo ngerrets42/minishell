@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 11:52:41 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/07 12:43:47 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 15:10:14 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,12 @@ static int	expand_last(char **arr, char **env)
 
 #define END_CHARS " \t\r\n\v\f<>|"
 
+t_token_type	exp_and_str(char ***arr, char ***env, t_token_type r)
+{
+	expand_last(*arr, *env);
+	return (r);
+}
+
 char	*token_get_str(char **str, t_token_type q, char ***env)
 {
 	char	**arr;
@@ -61,7 +67,7 @@ char	*token_get_str(char **str, t_token_type q, char ***env)
 			break ;
 		}
 		if (q == TK_ARG && (*pend == '\"' || *pend == '\''))
-			q = add_str(&arr, pend, str, gq(*pend));
+			q = exp_and_str(&arr, env, add_str(&arr, pend, str, gq(*pend)));
 		else if ((q == TK_ARG_STR_DQ || q == TK_ARG_STR_SQ) && (gq(*pend) == q))
 		{
 			if (add_str(&arr, pend, str, q) != TK_ARG_STR_SQ)

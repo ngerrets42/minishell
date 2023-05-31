@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/22 12:14:17 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/01 15:40:31 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 14:50:11 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	command_expand(t_command *command, char **env)
 {
 	char	*path;
 
+	if (n_strlen(command->argv[0]) == 0 || command->argv[0][0] == '/')
+		return ;
 	path = NULL;
 	if (command->argv && !n_strfind(command->argv[0], "/")
 		&& command->argv[0][0] != '.')

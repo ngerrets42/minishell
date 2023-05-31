@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/08 11:44:03 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/07 11:56:26 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 14:19:55 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,31 @@ static t_token	token_next(char **str, char ***env)
 	if (token.type == TK_VAR)
 		expand_argument(&(token.str), *env);
 	return (token);
+}
+
+bool	tokens_good(t_llist *token_list, t_token **btoken)
+{
+	t_llist	*prev;
+
+	*btoken = ((t_token *)token_list->content);
+	if ((*btoken)->type == TK_PIPE)
+		return (false);
+	while (token_list && token_list->next)
+	{
+		*btoken = ((t_token *)token_list->content);
+		if ((*btoken)->type == TK_PIPE
+			&& ((t_token *)token_list->next->content)->type == TK_PIPE)
+			return (false);
+		if (token_is_redirect((*btoken)->type)
+			&& token_is_redirect(((t_token *)token_list->next->content)->type))
+			return (false);
+		prev = token_list;
+		token_list = token_list->next;
+	}
+	*btoken = ((t_token *)prev->content);
+	if ((*btoken)->type == TK_PIPE)
+		return (false);
+	return (true);
 }
 
 t_llist	*tokenize(char *str, char ***env)

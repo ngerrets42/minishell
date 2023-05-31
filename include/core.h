@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/14 10:36:45 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/27 10:37:21 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/27 14:34:18 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@
 # define SHELL_LEVEL_VAR "SHLVL"
 
 # define EXIT_STATUS_CMD_NOT_FOUND 127
+# define EXIT_STATUS_NO_PERMISSION 126
+# define EXIT_STATUS_NUMERIC_ARG 255
 
 extern int	g_exit_status;
 

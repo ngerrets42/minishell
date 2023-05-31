@@ -6,26 +6,12 @@
 /*   By: cstaats <cstaats@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/28 14:43:22 by cstaats       #+#    #+#                 */
-/*   Updated: 2022/12/07 15:33:13 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/27 14:59:05 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "expander.h"
-
-static bool	is_alnum(char *str)
-{
-	while (*str)
-	{
-		if (!((*str >= 'a' && *str <= 'z' )
-				|| (*str >= 'A' && *str <= 'Z')
-				|| (*str >= '0' && *str <= '9')
-				|| *str == '_' || *str == '='))
-			return (false);
-		str++;
-	}
-	return (true);
-}
 
 static void	put(char *str)
 {
@@ -78,6 +64,35 @@ static int	print_env_sorted(char ***env)
 	return (0);
 }
 
+static bool	valid_export(const char *str, int *code)
+{
+	size_t	i;
+
+	i = 0;
+	if (str[0] == '=')
+	{
+		perr("minishell: export:`", str, "\' not a valid identifier\n");
+		*code = 1;
+		return (false);
+	}
+	if (n_strhaschar("0123456789", str[0]))
+		++i;
+	while (str[i] != '\0' && str[i] != '=')
+	{
+		if (!((str[i] >= 'a' && str[i] <= 'z')
+				|| (str[i] >= 'A' && str[i] <= 'Z')
+				|| (str[i] >= '0' && str[i] <= '9')
+				|| str[i] == '_'))
+		{
+			perr("minishell: export:`", str, "\' not a valid identifier\n");
+			*code = 1;
+			return (false);
+		}
+		++i;
+	}
+	return (true);
+}
+
 int	builtin_export(int argc, char **argv, char ***env)
 {
 	char	*word;
@@ -86,23 +101,23 @@ int	builtin_export(int argc, char **argv, char ***env)
 
 	if (argc == 1)
 		return (print_env_sorted(env));
-	argv++;
+	argc = 0 * (size_t)(++argv);
 	while (*argv)
 	{
-		if (n_strhaschar("0123456789", (*argv)[0]) || !is_alnum(*argv))
-			return (EXIT_FAILURE + 0 * perr("minishell: export:`",
-					*argv, "\' not a valid identifier\n"));
-		p = n_strfind(*argv, "=");
-		if (!p)
-			p = *argv + n_strlen(*argv);
-		word = cpy_word(*argv, p);
-		index = get_environment_index(*env, word);
-		free(word);
-		if ((*env)[index] != NULL && n_strfind(*argv, "="))
-			env_overwrite_var(env, index, *argv);
-		else if ((*env)[index] == NULL)
-			env_add_var(env, *argv);
+		if (valid_export(*argv, &argc))
+		{
+			p = n_strfind(*argv, "=");
+			if (!p)
+				p = *argv + n_strlen(*argv);
+			word = cpy_word(*argv, p);
+			index = get_environment_index(*env, word);
+			free(word);
+			if ((*env)[index] != NULL && n_strfind(*argv, "="))
+				env_overwrite_var(env, index, *argv);
+			else if ((*env)[index] == NULL)
+				env_add_var(env, *argv);
+		}
 		argv++;
 	}
-	return (0);
+	return (exit_status_set(argc));
 }

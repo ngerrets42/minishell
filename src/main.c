@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/07 15:09:20 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/07 14:26:18 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 11:14:10 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,11 @@ static void	set_greater_env(char ***env)
 	tmp = get_environment_var(*env, "PWD");
 	pwd = n_protect(n_memdup(tmp, sizeof(char) * (n_strlen(tmp) + 1)));
 	tmp = get_environment_var(*env, "OLDPWD");
-	oldpwd = n_protect(n_memdup(tmp, sizeof(char) * (n_strlen(tmp) + 1)));
+	if (tmp)
+		oldpwd = n_protect(n_memdup(tmp, sizeof(char) * (n_strlen(tmp) + 1)));
 	env[1][0] = pwd;
-	env[1][1] = oldpwd;
+	if (tmp)
+		env[1][1] = oldpwd;
 }
 
 int	main(int argc, char **argv, char **env)

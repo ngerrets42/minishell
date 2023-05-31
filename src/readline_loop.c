@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 12:02:31 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/27 10:34:59 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 14:17:56 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,17 @@ static void	implementation(char *str, char ***env)
 {
 	t_llist	*token_list;
 	t_llist	*command_list;
+	t_token	*bad_token;
 
 	token_list = tokenize(str, env);
 	debug_outp_tokens(str, token_list);
+	if (!tokens_good(token_list, &bad_token))
+	{
+		perr("minishell: syntax error near unexpected token `",
+			token_as_text(bad_token->type), "'\n");
+		llist_clear(&token_list, (t_contentf)token_free);
+		return ;
+	}
 	command_list = commands_parse(token_list);
 	debug_outp_commands(command_list);
 	llist_clear(&token_list, (t_contentf)free);

@@ -6,27 +6,27 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/08 17:35:37 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/27 10:58:42 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 14:17:12 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokens.h"
 
 //	For debugging purposes
-static const char	*token_as_text(t_token_type type)
+const char	*token_as_text(t_token_type type)
 {
 	static const char	*str[] = {
-	[TK_NONE] = "NONE",
-	[TK_PIPE] = "PIPE",
-	[TK_REDIRECT_HEREDOC] = "REDIRECT_HEREDOC",
-	[TK_REDIRECT_APPEND] = "REDIRECT_APPEND",
-	[TK_REDIRECT_OUTPUT] = "REDIRECT_OUT",
-	[TK_REDIRECT_INPUT] = "REDIRECT_IN",
-	[TK_ARG] = "ARG",
-	[TK_ARG_STR_SQ] = "STR_SINGLE_QUOTE",
-	[TK_ARG_STR_DQ] = "STR_DOUBLE_QUOTE",
-	[TK_VAR] = "VAR",
-	[TK_END] = "END"
+	[TK_NONE] = "",
+	[TK_PIPE] = "|",
+	[TK_REDIRECT_HEREDOC] = "<<",
+	[TK_REDIRECT_APPEND] = ">>",
+	[TK_REDIRECT_OUTPUT] = ">",
+	[TK_REDIRECT_INPUT] = "<",
+	[TK_ARG] = "",
+	[TK_ARG_STR_SQ] = "'",
+	[TK_ARG_STR_DQ] = "\"",
+	[TK_VAR] = "$",
+	[TK_END] = ""
 	};
 
 	return (str[type]);
@@ -77,4 +77,5 @@ void	token_print(const t_token *token)
 void	token_free(t_token *token)
 {
 	free(token->str);
+	free(token);
 }

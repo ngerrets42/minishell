@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 12:50:13 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/13 11:56:36 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 14:42:00 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,10 @@ bool	executor_io(int io[4], t_command *cmd, int pipes[2][2], char **env)
 		if (fd < 0)
 			return (0 * close(io[P_READ] + 0 * close(io[P_WRITE])));
 		if (curr_file->fmode == OUT_APPEND || curr_file->fmode == OUT_TRUNC)
-			io[P_WRITE] = fd + 0 * close(io[P_WRITE]);
+			io[P_WRITE] = fd + 0 * (close(io[P_WRITE]));
 		else
-			io[P_READ] = fd + 0 * close(io[P_READ]);
+			io[P_READ] = fd + 0 * (close(io[P_READ])
+					+ close(pipes[LEFT][P_READ]));
 		curr_list = curr_list->next;
 	}
 	if (io[P_READ] < 0)

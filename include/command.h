@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/17 13:33:56 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/07 14:29:08 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 14:12:22 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_command
 }	t_command;
 
 t_llist		*commands_parse(t_llist	*tokens);
+bool		is_redirect(const t_token *token);
 
 //	command_utils.c
 void		command_free(t_command *command);

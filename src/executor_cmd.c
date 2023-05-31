@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 12:52:30 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/13 11:58:10 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 15:19:44 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	do_parent(int io[4])
 	if (io[P_WRITE] != STDOUT_FILENO)
 		close(io[P_WRITE]);
 	close(io[3]);
+	signal(SIGINT, SIG_IGN);
 }
 
 /*
@@ -65,7 +66,7 @@ static void	do_child(int io[4], t_command *command, char ***env)
 	}
 }
 
-static bool	run_builtin(int io[2], t_command *cmd, char ***env, size_t amount)
+static int	run_builtin(int io[4], t_command *cmd, char ***env, size_t amount)
 {
 	int			pid;
 	t_builtin_f	*func;
@@ -83,37 +84,39 @@ static bool	run_builtin(int io[2], t_command *cmd, char ***env, size_t amount)
 		duptwo(io[P_WRITE], STDOUT_FILENO);
 		func = builtin_get(cmd->argv[0]);
 		pid = (*func)(n_strarr_size(cmd->argv), cmd->argv, env);
+		executor_handle_exit(func, pid, amount);
 		if (amount > 1)
 			exit(pid);
 		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
 	}
 	else
 		do_parent(io);
-	return (true);
+	return (pid);
 }
 
-bool	run_command(int io[4], t_command *cmd, char ***env, size_t amount)
+int	run_command(int io[4], t_command *cmd, char ***env, size_t amount)
 {
-	int			pid;	
+	int	pid;
 
 	if (!cmd->argv || !cmd->argv[0])
-		return (true);
+		return (-1);
 	if (builtin_get(cmd->argv[0]))
 		return (run_builtin(io, cmd, env, amount));
 	command_expand(cmd, *env);
-	if (!n_strfind(cmd->argv[0], "/") || access(cmd->argv[0], F_OK | X_OK) != 0)
-	{
-		perr("minishell: command not found: ", cmd->argv[0], "\n");
-		return (!exit_status_set(EXIT_STATUS_CMD_NOT_FOUND));
-	}
+	if (!n_strfind(cmd->argv[0], "/") || access(cmd->argv[0], F_OK) != 0
+		|| n_strlen(cmd->argv[0]) <= 0)
+		return (-1 + 0 * exit_status_set(EXIT_STATUS_CMD_NOT_FOUND)
+			+ 0 * perr("minishell: ", cmd->argv[0], ": command not found\n"));
+	else if (access(cmd->argv[0], X_OK) != 0)
+		return (-1 + 0 * exit_status_set(EXIT_STATUS_NO_PERMISSION)
+			+ 0 * perr("minishell: ", cmd->argv[0], ": Permission denied\n"));
 	pid = fork();
 	if (pid < 0)
 		n_protect(NULL);
 	else if (pid == 0)
-	{
 		do_child(io, cmd, env);
-	}
 	else
 		do_parent(io);
-	return (true);
+	return (pid);
 }

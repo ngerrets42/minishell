@@ -6,7 +6,7 @@
 /*   By: cstaats <cstaats@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/28 14:43:22 by cstaats       #+#    #+#                 */
-/*   Updated: 2022/12/27 10:31:03 by ngerrets      ########   odam.nl         */
+/*   Updated: 2023/01/05 15:26:03 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	builtin_echo(int argc, char **argv, char ***envp)
 	i = 1;
 	if (argc < 2)
 		return (writeandreturn());
-	while (is_flag(argv[i]))
+	while (i <= argc - 1 && is_flag(argv[i]))
 	{
 		newline = false;
 		i++;

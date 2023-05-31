@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/23 14:31:59 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/07 11:22:58 by ngerrets      ########   odam.nl         */
+/*   Updated: 2023/01/05 15:28:36 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ t_builtin_f	*builtin_get(const char *cmd)
 	i = 0;
 	while (array[i].str)
 	{
-		if (n_strcmp(cmd, array[i].str) == 0)
+		if (n_strlen(cmd) == n_strlen(array[i].str)
+			&& n_strcmp(cmd, array[i].str) == 0)
 			return (&(array[i].func));
 		i++;
 	}

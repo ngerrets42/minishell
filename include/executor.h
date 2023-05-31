@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/15 13:30:53 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/07 12:55:02 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 12:59:17 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ enum e_pipe_location
 };
 
 void	execute(t_llist *command_list, size_t list_size, char ***env);
+void	executor_handle_exit(t_builtin_f *func, int pid, int amount);
 
 //	executor_heredoc.c
 int		executor_open_heredoc(const char *terminator, char **env);
@@ -51,6 +52,6 @@ int		executor_open_outfile(const char *path, t_fmode fmode);
 bool	executor_io(int io[3], t_command *cmd, int pipes[2][2], char **env);
 
 //	executor_cmd.c
-bool	run_command(int io[3], t_command *cmd, char ***env, size_t amount);
+int		run_command(int io[3], t_command *cmd, char ***env, size_t amount);
 
 #endif	//	EXECUTOR_H

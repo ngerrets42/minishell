@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/23 14:20:18 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/27 10:34:03 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/29 14:42:16 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 static bool	is_numeric(const char *str)
 {
+	while (*str == '0')
+		++str;
+	if (n_strlen(str) >= 20)
+		return (false);
 	while (*str)
 	{
 		if (*str != '-' && (*str < '0' || *str > '9'))
@@ -31,20 +35,17 @@ int	builtin_exit(int argc, char **argv, char ***env)
 	status = exit_status();
 	if (argc > 1)
 	{
+		if (!is_numeric(argv[1]))
+		{
+			perr("minishell: exit: ", argv[1], ": numeric argument required\n");
+			return (exit_status_set(EXIT_STATUS_NUMERIC_ARG));
+		}
 		if (argc > 2)
 		{
 			perr("minishell: exit: too many arguments\n", NULL, NULL);
-			exit(EXIT_FAILURE);
+			return (exit_status_set(EXIT_FAILURE));
 		}
-		if (!is_numeric(argv[1]))
-		{
-			printf("exit\n");
-			perr("minishell: exit: ", argv[1], ": numeric argument required\n");
-			exit(EXIT_FAILURE);
-		}
-		status = ft_atoi(argv[1]);
+		exit_status_set(ft_atoi(argv[1]));
 	}
-	printf("exit\n");
-	exit(status);
-	return (status);
+	return (EXIT_SUCCESS);
 }

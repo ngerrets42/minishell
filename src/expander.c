@@ -6,7 +6,7 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/16 12:03:57 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/27 10:20:24 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/27 14:09:55 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ char	*str_inserted(char *str, char *startp, char *endp, char *str_insert)
 	return (result);
 }
 
-static bool is_alnum(char c)
+static bool	is_alnum(char c)
 {
-	return((c >= 'a' && c <= 'z')
+	return ((c >= 'a' && c <= 'z')
 		|| (c >= 'A' && c <= 'Z')
 		|| (c >= '0' && c <= '9')
 		|| (c == '_'));

@@ -6,7 +6,7 @@
 /*   By: cstaats <cstaats@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 14:11:21 by cstaats       #+#    #+#                 */
-/*   Updated: 2022/12/27 10:30:37 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/27 14:07:29 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	builtin_env(int argc, char **argv, char ***envp)
 	while ((*envp)[i] != NULL)
 	{
 		len = n_strlen((*envp)[i]);
-		if (len > 0)
+		if (len > 0 && n_strhaschar((*envp)[i], '='))
 		{
 			write(1, (*envp)[i], len * sizeof(char));
 			write(1, "\n", 1 * sizeof(char));

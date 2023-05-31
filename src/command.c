@@ -6,13 +6,13 @@
 /*   By: ngerrets <ngerrets@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/17 13:35:14 by ngerrets      #+#    #+#                 */
-/*   Updated: 2022/12/07 14:21:12 by ngerrets      ########   odam.nl         */
+/*   Updated: 2022/12/28 14:12:24 by ngerrets      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "command.h"
 
-static bool	is_redirect(const t_token *token)
+bool	is_redirect(const t_token *token)
 {
 	return (token->type == TK_REDIRECT_HEREDOC
 		|| token->type == TK_REDIRECT_INPUT
