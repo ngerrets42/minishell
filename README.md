@@ -1,5 +1,5 @@
 # minishell
-A partial imitation of the UNIX Bash shell.
+A partial imitation of the UNIX Bash shell. Created in cooperation with [@CandaceStaats](http://github.com/CandaceStaats)
 
 **According to the 42 subject:**
 
